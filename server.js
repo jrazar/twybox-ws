@@ -30,6 +30,8 @@ wss.on('connection', (ws) => {
 app.post('/disparo', express.json(), (req, res) => {
   const data = req.body || {};
 
+  console.log('POST /disparo recibido:', data);
+
   // Enviar mensaje a todos los clientes conectados
   const msg = {
     type: 'TRIGGER_FLOW',
@@ -51,4 +53,5 @@ if (!module.parent) {
 
 // Exportar para Passenger
 module.exports = app;
+
 
