@@ -26,6 +26,24 @@ wss.on('connection', (ws) => {
   });
 });
 
+// Endpoint que recibe el disparo desde PHP
+app.post('/disparo', express.json(), (req, res) => {
+  const data = req.body || {};
+
+  // Enviar mensaje a todos los clientes conectados
+  const msg = {
+    type: 'TRIGGER_FLOW',
+    flowId: data.flowId || '21-22',
+    payload: data.payload || {}
+  };
+
+  wss.clients.forEach(c => {
+    if (c.readyState === 1) c.send(JSON.stringify(msg));
+  });
+
+  res.json({ status: 'ok', reenviado: msg });
+});
+
 // Iniciar servidor solo si Passenger no lo controla
 if (!module.parent) {
   server.listen(PORT, () => console.log(`HTTP+WS en puerto ${PORT}`));
@@ -33,3 +51,4 @@ if (!module.parent) {
 
 // Exportar para Passenger
 module.exports = app;
+
