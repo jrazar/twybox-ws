@@ -34,8 +34,9 @@ app.post('/disparo', express.json(), (req, res) => {
   // Enviar mensaje a todos los clientes conectados
   const msg = {
     type: 'TRIGGER_FLOW',
-    flowId: data.flowId || '21-22',
-    payload: data.payload || {}
+    flowId: data.flowId,   // ahora viene dinámico desde PHP
+    payload: data || {}
+
   };
 
   wss.clients.forEach(c => {
@@ -52,3 +53,4 @@ if (!module.parent) {
 
 // Exportar para Passenger
 module.exports = app;
+
